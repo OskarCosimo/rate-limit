@@ -18,9 +18,9 @@
 $redis = new Redis();
 //connection to redis memory database
 $redis->connect('127.0.0.1', 6379);
-//password for redist
+//password for redis
 $redis->auth('');
-//select the database in memory (can be changed from 0 to 16)
+//select the database in memory (can be changed from 0 to max 16)
 $redis->select(0);
 
 	$max_calls_limit = 500;
