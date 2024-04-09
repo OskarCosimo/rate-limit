@@ -6,7 +6,7 @@
  * @version 1.0
  * @author oskar @ myincorporate.org
  *
- * $time_period = Time period is specified in seconds (360 seconds is 1 hour)
+ * $time_period = Time period is specified in seconds (360 seconds is 1 hour , 86400 seconds is 1 day)
  * $max_calls_limit = max calls allowed in that timespan
  * $total_user_calls = the toal calls the user has made
  * clients headers:
