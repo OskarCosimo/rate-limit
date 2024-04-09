@@ -30,12 +30,21 @@
 //End of the editable part
 
 //It is possible to edit this part to implement the authentication system, just change the $user_code_ratelimit variable with the token used by the authentication system.
-if (!empty($_SERVER['HTTP_CLIENT_IP'])):
-	$user_code_ratelimit = $_SERVER['HTTP_CLIENT_IP'];
-elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])):
-	$user_code_ratelimit = $_SERVER['HTTP_X_FORWARDED_FOR'];
+//Get the visitor's IP (also if behind proxy)
+if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])):
+	$_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+	$_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+endif;
+	$client = @$_SERVER['HTTP_CLIENT_IP'];
+	$forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+	$remote = $_SERVER['REMOTE_ADDR'];
+
+if (filter_var($client, FILTER_VALIDATE_IP)):
+	$user_code_ratelimit = $client;
+elseif (filter_var($forward, FILTER_VALIDATE_IP)):
+	$user_code_ratelimit = $forward;
 else:
-	$user_code_ratelimit = $_SERVER['REMOTE_ADDR'];
+	$user_code_ratelimit = $remote;
 endif;
 //End of the editable part
 
