@@ -23,9 +23,13 @@ $redis->auth('');
 //select the database in memory (can be changed from 0 to max 16)
 $redis->select(0);
 
+//You can edit this part to set custom values
 	$max_calls_limit = 500;
 	$time_period = 3600;
 	$total_user_calls = 0;
+//End of the editable part
+
+//It is possible to edit this part to implement the authentication system, just change the $user_code_ratelimit variable with the token used by the authentication system.
 	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 		$user_code_ratelimit = $_SERVER['HTTP_CLIENT_IP'];
 	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -33,9 +37,12 @@ $redis->select(0);
 	} else {
 		$user_code_ratelimit = $_SERVER['REMOTE_ADDR'];
 	}
+//End of the editable part
 
+//hash the usercode created
 $user_code_ratelimit_hashed = hash('sha256', $user_code_ratelimit);
 
+//check the in-memory database and update it if needed
 if (!$redis->exists($user_code_ratelimit_hashed)) {
 	$redis->set($user_code_ratelimit_hashed, 1);
 	$redis->expire($user_code_ratelimit_hashed, $time_period);
